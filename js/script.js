@@ -4,7 +4,7 @@ function getRandomBetween(min, max) {
 
 
 window.onload = () => {
-    const canvas = new Canvas({ a: 4 });
+    const canvas = new Canvas({ a: 2 });
     canvas.createGrid();
 
     let i, j;
@@ -22,7 +22,7 @@ window.onload = () => {
     j = Math.floor((canvas.grid[0].length - 1) / 2) */
     canvas.grid[i][j].isLife = true;
     canvas.updateGrid(canvas.grid[i][j])
-    start_animate(50, canvas);
+    start_animate(40, canvas);
 }
 
 
