@@ -4,8 +4,8 @@ class Canvas {
         this.canvas = document.createElement('canvas')
         this.ctx = this.canvas.getContext('2d')
 
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        this.canvas.width = window.innerWidth * 2;
+        this.canvas.height = window.innerHeight * 2;
         this.grid = new Array()
         document.body.insertAdjacentElement('afterbegin', this.canvas);
     }
@@ -19,7 +19,9 @@ class Canvas {
                 this.grid[i][j] = {
                     x: x,
                     y: y,
-                    isLife: false
+                    isBlue: false,
+                    isGreen: false,
+                    isRed: false
                 }
                 j++;
             }
@@ -27,13 +29,20 @@ class Canvas {
         }
     }
 
-    updateGrid({ x, y, isLife }) {
-        if (isLife) {
-            this.ctx.fillStyle = `rgb(${this.getNewRange(0, this.grid.length, 0, 255, x)} ${this.getNewRange(0, this.grid[0].length, 0, 255, y)} ${this.getNewRange(5, this.grid[0].length, 0, 255, x)})`
+    updateGrid({ x, y, isBlue, isGreen, isRed }) {
+        this.ctx.clearRect(x, y, this.a, this.a)
+
+        if (isBlue) {
+            this.ctx.fillStyle = `#003B46`
             this.ctx.fillRect(x, y, this.a, this.a)
         }
-        else {
-            this.ctx.clearRect(x, y, this.a, this.a)
+        else if (isGreen) {
+            this.ctx.fillStyle = `#66A5AD`
+            this.ctx.fillRect(x, y, this.a, this.a)
+        }
+        else if (isRed) {
+            this.ctx.fillStyle = `#07575B`
+            this.ctx.fillRect(x, y, this.a, this.a)
         }
     }
 

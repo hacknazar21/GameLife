@@ -4,24 +4,45 @@ function getRandomBetween(min, max) {
 
 
 window.onload = () => {
-    const canvas = new Canvas({ a: 2 });
+    const canvas = new Canvas({ a: 12 });
     canvas.createGrid();
-
     let i, j;
 
-    i = Math.floor((canvas.grid.length - 1) / 2)
+    /* i = Math.floor((canvas.grid.length - 1) / 2)
     j = Math.floor((canvas.grid[0].length - 1) / 2)
     canvas.grid[i][j].isLife = true;
-    canvas.updateGrid(canvas.grid[i][j])
+    canvas.updateGrid(canvas.grid[i][j]) */
 
     /* i = Math.floor((canvas.grid.length - 1) / 2) - 1
     j = Math.floor((canvas.grid[0].length - 1) / 2)
     canvas.grid[i][j].isLife = true;
     canvas.updateGrid(canvas.grid[i][j])
+
     i = Math.floor((canvas.grid.length - 1) / 2) - 2
-    j = Math.floor((canvas.grid[0].length - 1) / 2) */
+    j = Math.floor((canvas.grid[0].length - 1) / 2)
     canvas.grid[i][j].isLife = true;
     canvas.updateGrid(canvas.grid[i][j])
+
+    i = Math.floor((canvas.grid.length - 1) / 2) - 3
+    j = Math.floor((canvas.grid[0].length - 1) / 2)
+    canvas.grid[i][j].isLife = true;
+    canvas.updateGrid(canvas.grid[i][j]) */
+
+    const colors = ['isBlue', 'isGreen', 'isRed']
+
+    for (let index = 0; index < 40000; index++) {
+        i = getRandomBetween(0, canvas.grid.length - 1)
+        j = getRandomBetween(0, canvas.grid[0].length - 1)
+        const randColor = getRandomBetween(0, colors.length - 1)
+        if (colors[randColor] == 'isBlue')
+            canvas.grid[i][j].isBlue = true
+        else if (colors[randColor] == 'isGreen')
+            canvas.grid[i][j].isGreen = true
+        else if (colors[randColor] == 'isRed')
+            canvas.grid[i][j].isRed = true
+        canvas.updateGrid(canvas.grid[i][j])
+    }
+
     start_animate(40, canvas);
 }
 
@@ -52,35 +73,70 @@ function start_animate(duration, canvas) {
 }
 
 function getRules(canvas) {
-    const forDie = []
-    const forLife = []
+    const redGreen = [], greenBlue = [], blueRed = [];
 
-    canvas.grid.forEach((row, indexrow) => {
-        row.forEach((cell, indexcell) => {
-            let counterLife = 0;
-            if (indexrow - 1 > 0 && canvas.grid[indexrow - 1][indexcell].isLife) counterLife++;
-            if (indexcell - 1 > 0 && canvas.grid[indexrow][indexcell - 1].isLife) counterLife++;
-            if (indexrow - 1 > 0 && indexcell - 1 > 0 && canvas.grid[indexrow - 1][indexcell - 1].isLife) counterLife++;
-            if (indexrow + 1 < canvas.grid.length && canvas.grid[indexrow + 1][indexcell].isLife) counterLife++;
-            if (indexcell + 1 < canvas.grid[0].length && canvas.grid[indexrow][indexcell + 1].isLife) counterLife++;
-            if (indexrow + 1 < canvas.grid.length && indexcell + 1 < canvas.grid[0].length && canvas.grid[indexrow + 1][indexcell + 1].isLife) counterLife++;
-            if (indexrow - 1 > 0 && indexcell + 1 < canvas.grid[0].length && canvas.grid[indexrow - 1][indexcell + 1].isLife) counterLife++;
-            if (indexrow + 1 < canvas.grid.length && indexcell - 1 > 0 && canvas.grid[indexrow + 1][indexcell - 1].isLife) counterLife++;
-            if (cell.isLife) {
-                /* if (counterLife < 2 || counterLife > 3) forDie.push(cell) */
+    canvas.grid.forEach((row, y) => {
+        row.forEach((cell, x) => {
+            let counterBlue = 0, counterGreen = 0, counterRed = 0;
+            if (y - 1 > 0 && canvas.grid[y - 1][x].isBlue) counterBlue++;
+            else if (y - 1 > 0 && canvas.grid[y - 1][x].isGreen) counterGreen++;
+            else if (y - 1 > 0 && canvas.grid[y - 1][x].isRed) counterRed++;
+
+            if (x - 1 > 0 && canvas.grid[y][x - 1].isBlue) counterBlue++;
+            else if (x - 1 > 0 && canvas.grid[y][x - 1].isGreen) counterGreen++;
+            else if (x - 1 > 0 && canvas.grid[y][x - 1].isRed) counterRed++;
+
+            if (y + 1 < canvas.grid.length && canvas.grid[y + 1][x].isBlue) counterBlue++;
+            else if (y + 1 < canvas.grid.length && canvas.grid[y + 1][x].isGreen) counterGreen++;
+            else if (y + 1 < canvas.grid.length && canvas.grid[y + 1][x].isRed) counterRed++;
+
+            if (x + 1 < canvas.grid[0].length && canvas.grid[y][x + 1].isBlue) counterBlue++;
+            else if (x + 1 < canvas.grid[0].length && canvas.grid[y][x + 1].isGreen) counterGreen++;
+            else if (x + 1 < canvas.grid[0].length && canvas.grid[y][x + 1].isRed) counterRed++;
+
+
+            if (y - 1 > 0 && x - 1 > 0 && canvas.grid[y - 1][x - 1].isBlue) counterBlue++;
+            else if (y - 1 > 0 && x - 1 > 0 && canvas.grid[y - 1][x - 1].isGreen) counterGreen++;
+            else if (y - 1 > 0 && x - 1 > 0 && canvas.grid[y - 1][x - 1].isRed) counterRed++;
+
+            if (y + 1 < canvas.grid.length && x + 1 < canvas.grid[0].length && canvas.grid[y + 1][x + 1].isBlue) counterBlue++;
+            else if (y + 1 < canvas.grid.length && x + 1 < canvas.grid[0].length && canvas.grid[y + 1][x + 1].isGreen) counterGreen++;
+            else if (y + 1 < canvas.grid.length && x + 1 < canvas.grid[0].length && canvas.grid[y + 1][x + 1].isRed) counterRed++;
+
+            if (y - 1 > 0 && x + 1 < canvas.grid[0].length && canvas.grid[y - 1][x + 1].isBlue) counterBlue++;
+            else if (y - 1 > 0 && x + 1 < canvas.grid[0].length && canvas.grid[y - 1][x + 1].isGreen) counterGreen++;
+            else if (y - 1 > 0 && x + 1 < canvas.grid[0].length && canvas.grid[y - 1][x + 1].isRed) counterRed++;
+
+            if (y + 1 < canvas.grid.length && x - 1 > 0 && canvas.grid[y + 1][x - 1].isBlue) counterBlue++;
+            else if (y + 1 < canvas.grid.length && x - 1 > 0 && canvas.grid[y + 1][x - 1].isGreen) counterGreen++;
+            else if (y + 1 < canvas.grid.length && x - 1 > 0 && canvas.grid[y + 1][x - 1].isRed) counterRed++;
+
+            if (cell.isRed) {
+                if (counterGreen >= 2) redGreen.push(cell)
             }
-            else {
-                if (counterLife == 1) forLife.push(cell)
+            else if (cell.isGreen) {
+                if (counterBlue >= 2) greenBlue.push(cell)
+            }
+            else if (cell.isBlue) {
+                if (counterRed >= 2) blueRed.push(cell)
             }
         })
     });
 
-    for (const cell of forDie) {
-        cell.isLife = false
+    for (const cell of redGreen) {
+        cell.isRed = false;
+        cell.isGreen = true;
         canvas.updateGrid(cell)
     }
-    for (const cell of forLife) {
-        cell.isLife = true
+    for (const cell of greenBlue) {
+        cell.isGreen = false;
+        cell.isBlue = true;
         canvas.updateGrid(cell)
     }
+    for (const cell of blueRed) {
+        cell.isBlue = false;
+        cell.isRed = true;
+        canvas.updateGrid(cell)
+    }
+
 }
